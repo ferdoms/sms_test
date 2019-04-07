@@ -5,19 +5,32 @@
  */
 package stockmarketsimulator;
 
+import dao.CompanyDao;
+import dao.Dao;
+import dao.InvestorDao;
+import hibernate.entities.Company;
+import hibernate.entities.Investor;
+import org.hibernate.Session;
+
+
 /**
  *
  * @author fernandoms
  */
 public class StockMarketSimulator {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        System.out.println("Hellow world!!");
-    }
+    private static Dao<Company> CompanyDao;
     
+    public static void main(String[] args) {
+        CompanyDao companyDao = new CompanyDao();
+        InvestorDao investorDao = new InvestorDao();
+        Company c = new Company("Test5", 11, 10);
+        System.out.println("Beginning transaction");
+        companyDao.save(c);
+        System.out.println(c.getCompanyName() + " saved into Company's table");
+        Investor i = new Investor("Jackie", "Medeiros", 1000);
+        investorDao.save(i);
+        System.out.println(i.getFirstName() + " " + i.getLastName() + " saved into Investor's table");
+        
+    }
 }
