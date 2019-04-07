@@ -23,7 +23,7 @@ public class StockMarketSimulator {
     
     public static void main(String[] args) {
         
-        //esse commentario eh so um teste
+        //
         CompanyDao companyDao = new CompanyDao();
         InvestorDao investorDao = new InvestorDao();
         Company c = new Company("Test5", 11, 10);
