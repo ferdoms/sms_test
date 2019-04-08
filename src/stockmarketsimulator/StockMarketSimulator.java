@@ -8,8 +8,8 @@ package stockmarketsimulator;
 import dao.CompanyDao;
 import dao.Dao;
 import dao.InvestorDao;
-import hibernate.entities.Company;
-import hibernate.entities.Investor;
+import entities.Company;
+import entities.Investor;
 import org.hibernate.Session;
 
 

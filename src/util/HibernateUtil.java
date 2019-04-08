@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hibernate.util;
+package util;
 
-import hibernate.entities.Company;
-import hibernate.entities.Investor;
+import entities.Company;
+import entities.Investor;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
