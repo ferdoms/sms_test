@@ -32,14 +32,14 @@ public class Company {
     @Column(name="number_shares")
     private int numberOfShares;
     @Column(name="share_price")
-    private float sharePrice;
+    private int sharePrice;
     
      
     public Company(){
         
     }
 
-    public Company(String companyName, int numberOfShares, float sharePrice) {
+    public Company(String companyName, int numberOfShares, int sharePrice) {
         this.companyName = companyName;
         this.numberOfShares = numberOfShares;
         this.sharePrice = sharePrice;
@@ -73,7 +73,7 @@ public class Company {
         return sharePrice;
     }
 
-    public void setSharePrice(float sharePrice) {
+    public void setSharePrice(int sharePrice) {
         this.sharePrice = sharePrice;
     }
 

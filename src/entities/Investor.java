@@ -27,13 +27,13 @@ public class Investor {
     @Column(name="last_name")
     private String lastName;
     @Column(name="budget")
-    private float budget;    
+    private int budget;    
      
     public Investor(){
         
     }
 
-    public Investor(String firstName, String lastName, float budget) {
+    public Investor(String firstName, String lastName, int budget) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.budget = budget;
@@ -67,7 +67,7 @@ public class Investor {
         return budget;
     }
 
-    public void setBudget(float budget) {
+    public void setBudget(int budget) {
         this.budget = budget;
     }
     
