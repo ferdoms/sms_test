@@ -5,9 +5,9 @@
  */
 package dao;
 
-import hibernate.entities.Company;
-import hibernate.entities.Investor;
-import hibernate.util.HibernateUtil;
+import entities.Company;
+import entities.Investor;
+import util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

@@ -5,7 +5,7 @@
  */
 package dao;
 
-import hibernate.entities.Company;
+import entities.Company;
 import java.util.List;
 import java.util.Optional;
 
