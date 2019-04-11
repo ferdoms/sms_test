@@ -36,7 +36,9 @@ public class StockMarketSimulator {
         Investor i = new Investor("Jackie", "Medeiros", 1000);
         investorDao.save(i);
         System.out.println(i.getFirstName() + " " + i.getLastName() + " saved into Investor's table");
-        
+        Simulator sim = new Simulator();
+        sim.loadCompany();
+        sim.loadInvestors();
         //----------BUILDER TESTS----------------------------------------------
         
         InvestorBuilder invBuilder = new InvestorBuilder();
