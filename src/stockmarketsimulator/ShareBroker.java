@@ -32,14 +32,23 @@ public class ShareBroker implements Broker {
         this.valueShares(report.highDemandShares());
         this.devalueShares(report.lowDemandShares());
     }
-    
-    public Investment[] SharesUpTo(int amount){
+    @Override
+    public Investment[] investmentsUpTo(int amount){
         // get list of investments
         ArrayList<Investment> temp = investments;
         // filter investments valued up to @param amount
         temp.removeIf(i-> (i.getValue() < amount));
         
         return (Investment[])temp.toArray();
+    }
+    @Override
+    public void createInvestments() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void recordTransaction() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     private void valueShares(Share[] shares){
         for(Share share:shares){
@@ -73,6 +82,10 @@ public class ShareBroker implements Broker {
     public void recordTransaction(Investor investor, Investment investment ){
         report.saveTransaction(investor, investment);
     }
+
+    
+
+ 
     
     private class Report{
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();

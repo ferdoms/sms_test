@@ -5,6 +5,9 @@
  */
 package entities;
 
+import interfaces.Broker;
+import interfaces.Investment;
+import java.util.Random;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -66,12 +69,25 @@ public class Investor {
         this.lastName = lastName;
     }
 
-    public float getBudget() {
+    public int getBudget() {
         return budget;
     }
 
     public void setBudget(int budget) {
         this.budget = budget;
+    }
+    
+    public void buyInvestent(Broker broker){
+        Investment[] investments = broker.investmentsUpTo(this.budget);
+        int rand = new Random().nextInt(investments.length);
+        Investment investment = investments[rand];
+        this.comfirmAquisition(investment);
+        broker.performTransaction(this, investment);
+    }
+    public void comfirmAquisition(Investment investment){
+        int temp = this. getBudget();
+        temp = temp -investment.getValue();
+        this.setBudget(temp);
     }
     
 }
