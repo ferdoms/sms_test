@@ -3,19 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaces;
+package entities;
+
+import interfaces.Investment;
+
 
 /**
  *
  * @author fernandoms
  */
-public interface Investment {
-    
-    int value = 0;
-    int transactionsPeformed = 0;
-    String type = null;
-    
-    public int getValue();
-    public String getType();
+public class Share implements Investment {
     
 }

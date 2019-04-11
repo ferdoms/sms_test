@@ -5,6 +5,7 @@
  */
 package entities;
 
+import interfaces.Investment;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
  */
     @Entity
     @Table(name = "transaction")
-public class Transaction {
+public class TransactionRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -30,7 +31,9 @@ public class Transaction {
     @JoinColumn(name = "investor_id", referencedColumnName="id")
     private Investor investor;
     @OneToOne
-    @JoinColumn(name = "investor_id", referencedColumnName="id")
-    private Share share;
+    @JoinColumn(name = "investment_id", referencedColumnName="id")
+    private Investment investiment;
+
     
+
 }
