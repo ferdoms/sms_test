@@ -13,7 +13,9 @@ public interface Investment {
     
     int value = 0;
     int transactionsPeformed = 0;
+    String type = null;
     
     public int getValue();
+    public String getType();
     
 }
