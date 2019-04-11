@@ -33,6 +33,4 @@ public class TransactionRecord {
     @JoinColumn(name = "investment_id", referencedColumnName="id")
     private Investment investiment;
 
-    
-
 }
