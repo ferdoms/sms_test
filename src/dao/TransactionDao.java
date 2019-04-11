@@ -5,37 +5,34 @@
  */
 package dao;
 
-import entities.Transaction;
+import entities.TransactionRecord;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import util.HibernateUtil;
 
 
 
 /**
  *
- * @author joao-
+ * @author Joao Pedro H. Oliveira
  */
-public class TransactionDao implements Dao<Transaction>{
+public class TransactionDao implements Dao<TransactionRecord>{
 
     @Override
-    public void save(Transaction t) {
+    public void save(TransactionRecord t) {
         Transaction transaction = null;
-        
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
             // start a transaction
-            transaction = (Transaction) session.beginTransaction();
+            transaction = session.beginTransaction();
             // save the company object
             session.save(t);
             // commit transaction
             transaction.commit();
-
-        } catch (Exception e) {
+        }catch(Exception e){
             if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
         }
     }
-    
 }

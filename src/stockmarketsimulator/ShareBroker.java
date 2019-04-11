@@ -11,7 +11,7 @@ import interfaces.Broker;
 import interfaces.Investment;
 import java.util.ArrayList;
 import entities.Share;
-import entities.Transaction;
+import entities.TransactionRecord;
 
 /**
  *
@@ -73,9 +73,29 @@ public class ShareBroker implements Broker {
     public void recordTransaction(Investor investor, Investment investment ){
         report.saveTransaction(investor, investment);
     }
+
+    @Override
+    public Investment[] investmentsUpTo(float value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createInvestments() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void evaluateInvestments() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void recordTransaction() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     private class Report{
-        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+        ArrayList<TransactionRecord> transactions = new ArrayList<TransactionRecord>();
         
         void saveTransaction(Investor buyer, Investment investment){
             
@@ -103,9 +123,5 @@ public class ShareBroker implements Broker {
             Share[] shares = null;
             return shares;
         }
-
-    }
-    
-    
-    
+    } 
 }

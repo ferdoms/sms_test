@@ -18,15 +18,14 @@ import javax.persistence.Table;
 
 /**
  *
- * @author joao-
+ * @author Joao Pedro H. Oliveira
  */
-    @Entity
-    @Table(name = "transaction")
+@Entity
+@Table(name = "transaction")
 public class TransactionRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
     @OneToOne
     @JoinColumn(name = "investor_id", referencedColumnName="id")
     private Investor investor;

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author joao-
+ * @author Joao Pedro H. Oliveira
  */
 public class Simulator {
     //creating arraylists for company and investors
