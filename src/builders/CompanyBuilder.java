@@ -26,7 +26,7 @@ public class CompanyBuilder {
         this.nShare = amount;
     }
     public void setIPOShareValue(int value){
-        this.nShare = value;
+        this.IPOSharePrice = value;
     }
     public Company getObject(){
         return new Company(this.name, this.nShare, this.IPOSharePrice);

@@ -5,8 +5,12 @@
  */
 package entities;
 
+import interfaces.Broker;
+import java.util.Random;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,6 +24,7 @@ import javax.persistence.Table;
 public class Investor {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
     @Column(name="first_name")
@@ -63,12 +68,24 @@ public class Investor {
         this.lastName = lastName;
     }
 
-    public float getBudget() {
+    public int getBudget() {
         return budget;
     }
 
     public void setBudget(int budget) {
         this.budget = budget;
+    }
+    
+    public void buyInvestent(Broker broker){
+        Investment[] investments = broker.investmentsUpTo(this.budget);
+        int n = new Random().nextInt(investments.length);
+        Investment investment = investments[n];
+        broker.performTransaction(this, investment);   
+    }
+    public void confirmAquisition(Investment investment){
+        int temp = this. getBudget();
+        temp = temp -investment.getValue();
+        this.setBudget(temp);
     }
     
 }
