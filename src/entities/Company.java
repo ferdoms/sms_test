@@ -68,7 +68,7 @@ public class Company {
         this.numberOfShares = numberOfShares;
     }
 
-    public float getSharePrice() {
+    public int getSharePrice() {
         return sharePrice;
     }
 

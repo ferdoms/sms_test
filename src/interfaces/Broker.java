@@ -5,7 +5,10 @@
  */
 package interfaces;
 
+import entities.Investment;
 import entities.Investor;
+import entities.Company;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,11 +21,11 @@ public interface Broker {
     // should return any investment with values up to the inserted parameter
     public Investment[] investmentsUpTo(int value);
     // create investments ideally store in arrayList;
-    public void createInvestments();
+    public void createInvestments(ArrayList<Company> companies);
     
     public void performTransaction(Investor investor, Investment investment);
     
-    public void recordTransaction();
+    public void recordTransaction(Investor investor, Investment investment);
     
     public class Report{};
     

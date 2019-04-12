@@ -5,13 +5,16 @@
  */
 package stockmarketsimulator;
 
+import dao.InvestmentDao;
+import dao.TransactionDao;
 import entities.Company;
 import entities.Investor;
 import interfaces.Broker;
-import interfaces.Investment;
+import entities.Investment;
 import java.util.ArrayList;
 import entities.Share;
-import entities.Transaction;
+import entities.TransactionRecord;
+import java.util.Iterator;
 
 /**
  *
@@ -22,49 +25,58 @@ public class ShareBroker implements Broker {
     private ArrayList<Investment> investments = new ArrayList<Investment>();
     private int transactionsPeformed;
     private Report report = new Report();
-            
-    public ShareBroker(){
-    
-        
-    }
+    InvestmentDao investmentDao = new InvestmentDao();
     
     public void update(){
         this.valueShares(report.highDemandShares());
         this.devalueShares(report.lowDemandShares());
+        
     }
     @Override
     public Investment[] investmentsUpTo(int amount){
         // get list of investments
         ArrayList<Investment> temp = investments;
         // filter investments valued up to @param amount
-        temp.removeIf(i-> (i.getValue() < amount));
+        temp.removeIf(i-> (i.getValue() > amount));
         
-        return (Investment[])temp.toArray();
+        Object[] tempArray = temp.toArray();
+        Investment[] tempArrayInvest = new Investment[tempArray.length];
+            for (int i=0;i<tempArray.length;i++){
+                tempArrayInvest[i] = (Investment)tempArray[i];
+            }
+        return tempArrayInvest;
     }
     @Override
-    public void createInvestments() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void createInvestments(ArrayList<Company> companies) {
+        Iterator comps = companies.iterator();
+        while(comps.hasNext()){
+            Company company = (Company)comps.next();
+            // investmentDao.save(share
+            investments.add(new Share(company));
+        }
+  
     }
 
     @Override
-    public void recordTransaction() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void recordTransaction(Investor investor, Investment investment) {
+        report.saveTransaction(investor, investment);
     }
+    
     private void valueShares(Share[] shares){
         for(Share share:shares){
             int actualValue = share.getValue();
             share.setValue(actualValue*2);
-            daoShare.save(share);
-            investments.removeIf(i -> (i.getID() == share.getID));
+            investmentDao.save(share);
+            investments.removeIf(i -> (i.getId() == share.getId()));
             investments.add(share);
         }
     }
     private void devalueShares(Share[] shares){
         for(Share share:shares){
             int actualValue = share.getValue();
-            share.setValue(actualValue*0.05);
-            daoShare.save(share);
-            investments.removeIf(i -> (i.getID() == share.getID));
+            share.setValue((int)Math.round(actualValue*0.05));
+            investmentDao.save(share);
+            investments.removeIf(i -> (i.getId() == share.getId()));
             investments.add(share);
         }
     }
@@ -78,20 +90,14 @@ public class ShareBroker implements Broker {
         }
     }
 
-    
-    public void recordTransaction(Investor investor, Investment investment ){
-        report.saveTransaction(investor, investment);
-    }
-
-    
-
- 
-    
     private class Report{
-        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+        ArrayList<TransactionRecord> transactions = new ArrayList<TransactionRecord>();
         
         void saveTransaction(Investor buyer, Investment investment){
-            
+//            TransactionRecord record = new TransactionRecord(buyer,investment);
+//            new TransactionDao().save(record);
+            System.out.println(buyer.getFirstName()+" "+investment.getValue() +" "+ ((Share)investment).getCompany().getCompanyName());
+
         }
         Company[] getOnDemandCompanies(){
             Company[] temp = null;
@@ -116,9 +122,5 @@ public class ShareBroker implements Broker {
             Share[] shares = null;
             return shares;
         }
-
-    }
-    
-    
-    
+    } 
 }

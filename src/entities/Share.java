@@ -5,7 +5,6 @@
  */
 package entities;
 
-import interfaces.Investment;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -18,15 +17,19 @@ import javax.persistence.Entity;
 @DiscriminatorValue("share")
 public class Share extends Investment {
     
+    Company company;
     
-    @Override
-    public int getValue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Share(Company company){
+        this.value = company.getSharePrice();
+        this.company = company;
     }
-
-    @Override
-    public String getType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+            
+    public void setValue(int value){
+        this.value = value;
     }
     
+    public Company getCompany(){
+        return company;
+    }
 }

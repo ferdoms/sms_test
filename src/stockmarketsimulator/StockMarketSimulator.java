@@ -13,6 +13,8 @@ import dao.Dao;
 import dao.InvestorDao;
 import entities.Company;
 import entities.Investor;
+import interfaces.Broker;
+import java.util.ArrayList;
 import org.hibernate.Session;
 
 
@@ -37,46 +39,17 @@ public class StockMarketSimulator {
 //        investorDao.save(i);
 //        System.out.println(i.getFirstName() + " " + i.getLastName() + " saved into Investor's table");
         
-        //----------BUILDER TESTS----------------------------------------------
-        
-//        InvestorBuilder invBuilder = new InvestorBuilder();
-//        CompanyBuilder comBuilder = new CompanyBuilder();
-//        
-//        Director director = new Director();
-//        
-//        director.constructCompany(comBuilder);
-//        Company c1 = comBuilder.getObject();
-//        
-//        director.constructCompany(comBuilder);
-//        Company c2 = comBuilder.getObject();
-//        
-//        director.constructCompany(comBuilder);
-//        Company c3 = comBuilder.getObject();
-//        
-//        
-//        
-//        director.constructInvestor(invBuilder);
-//        Investor inv1 = invBuilder.getObject();
-//        
-//        director.constructInvestor(invBuilder);
-//        Investor inv2 = invBuilder.getObject();
-//        
-//        director.constructInvestor(invBuilder);
-//        Investor inv3 = invBuilder.getObject();
-//        
-//        
-//        System.out.println(c1.getCompanyName() + " saved into Company's table");
-//        System.out.println(c2.getCompanyName() + " saved into Company's table");
-//        System.out.println(c3.getCompanyName() + " saved into Company's table");
-//        System.out.println(inv1.getFirstName() + " " + inv1.getLastName() + " saved into Investor's table");
-//        System.out.println(inv2.getFirstName() + " " + inv2.getLastName() + " saved into Investor's table");
-//        System.out.println(inv3.getFirstName() + " " + inv3.getLastName() + " saved into Investor's table");
-
-
-
- //----------Simulator TESTS----------------------------------------------      
-        Simulator sim = new Simulator();
-        sim.loadCompany();
-        sim.loadInvestors();
-    }
+                
+        //----------Simulator TESTS----------------------------------------------      
+            Simulator sim = new Simulator();
+//            sim.loadCompany();
+//            sim.loadInvestors();
+            
+        //----------Broker TESTS----------------------------------------------
+            
+            sim.loadCompanies(10);
+            sim.loadInvestors(10);
+            sim.tradingDay();
+            
+        }
 }

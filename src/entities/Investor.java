@@ -6,7 +6,6 @@
 package entities;
 
 import interfaces.Broker;
-import interfaces.Investment;
 import java.util.Random;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -79,12 +78,11 @@ public class Investor {
     
     public void buyInvestent(Broker broker){
         Investment[] investments = broker.investmentsUpTo(this.budget);
-        int rand = new Random().nextInt(investments.length);
-        Investment investment = investments[rand];
-        this.comfirmAquisition(investment);
-        broker.performTransaction(this, investment);
+        int n = new Random().nextInt(investments.length);
+        Investment investment = investments[n];
+        broker.performTransaction(this, investment);   
     }
-    public void comfirmAquisition(Investment investment){
+    public void confirmAquisition(Investment investment){
         int temp = this. getBudget();
         temp = temp -investment.getValue();
         this.setBudget(temp);

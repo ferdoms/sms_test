@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaces;
+package entities;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -36,7 +36,6 @@ public abstract class Investment {
     public String getType(){
         return this.type;
     }
-
     public int getId() {
         return id;
     }

@@ -5,7 +5,6 @@
  */
 package entities;
 
-import interfaces.Investment;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,22 +17,32 @@ import javax.persistence.Table;
 
 /**
  *
- * @author joao-
+ * @author Joao Pedro H. Oliveira
  */
-    @Entity
-    @Table(name = "transaction")
+@Entity
+@Table(name = "transaction")
 public class TransactionRecord {
+
+    public TransactionRecord(Investor buyer, Investment investment) {
+        this.investor = investor;
+        this.investment = investment;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
     @OneToOne
-    @JoinColumn(name = "investor_id", referencedColumnName="id")
+    @JoinColumn(name = "investor_id", referencedColumnName = "id")
     private Investor investor;
     @OneToOne
-    @JoinColumn(name = "investment_id", referencedColumnName="id")
-    private Investment investiment;
-
+    @JoinColumn(name = "investment_id", referencedColumnName = "id")
+    private Investment investment;
     
+    public Investor getInvestor(){
+        return this.investor;
+    }
+    public Investment getInvestment(){
+        return this.investment;
+    }
 
 }
