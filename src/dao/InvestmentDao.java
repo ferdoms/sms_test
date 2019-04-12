@@ -3,14 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaces;
+package dao;
 
+import entities.Investment;
 /**
  *
  * @author fernandoms
  */
-public class Investment {
+public class InvestmentDao implements Dao<Investment>{
     
-    private float value;
+    @Override
+    public void save(Investment investment){
+    }
     
 }

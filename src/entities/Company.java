@@ -20,8 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="company")
 public class Company {
-    
-    
+  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -69,7 +68,7 @@ public class Company {
         this.numberOfShares = numberOfShares;
     }
 
-    public float getSharePrice() {
+    public int getSharePrice() {
         return sharePrice;
     }
 
