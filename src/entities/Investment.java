@@ -39,4 +39,11 @@ public abstract class Investment {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Investment{" + "id=" + id + ", value=" + value + ", transactionsPeformed=" + transactionsPeformed + ", type=" + type + '}';
+    }
+    
+    
 }

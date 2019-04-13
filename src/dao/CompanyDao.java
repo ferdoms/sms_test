@@ -7,37 +7,36 @@ package dao;
 
 import entities.Company;
 import util.HibernateUtil;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import static java.util.stream.DoubleStream.builder;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
 
 /**
  *
  * @author jacqu
  */
 public class CompanyDao implements Dao<Company> {
+
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Transaction transaction = null;
     
     @Override
     public void save(Company c) {
-       Transaction transaction = null;
+        try {
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
-            // start a transaction
+            //Start a transaction
             transaction = session.beginTransaction();
-            // save the company object
+            //Save object
             session.save(c);
-            // commit transaction
+            //Commit transaction
             transaction.commit();
+            session.close();
 
         } catch (Exception e) {
             if (transaction != null) {
@@ -46,4 +45,49 @@ public class CompanyDao implements Dao<Company> {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Company getById(int id) {
+        try {
+            //Start a transaction
+            transaction = session.beginTransaction();
+            //Get company by primary key id
+            Company c = (Company) session.get(Company.class, id);
+            //Commit transaction
+            transaction.commit();
+            //Return company
+            return c;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Company> getAll() {
+        try {
+
+            //Start a transaction
+            transaction = session.beginTransaction();
+            //Save object
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            //Create CriteriaQuery
+            CriteriaQuery<Company> criteria = builder.createQuery(Company.class);
+            //Specify criteria root
+            criteria.from(Company.class);
+            //Execute query
+            List<Company> companies = session.createQuery(criteria).getResultList();
+            //Close session
+            session.close();
+            //Return all companies
+            return companies;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+        return null;
+    }
+
 }

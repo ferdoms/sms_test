@@ -17,9 +17,9 @@ public interface Dao <E> {
     
 	public void save(E e);
        
-        //public E findById(int id);
-        //public List<E> getAll();
-        //public void update(E e, String[] params);
-        //public void delete(E e);
+        public E getById(int id);
+        public List<E> getAll();
+        //public void update(E e, int id);
+        //public void delete(int id);
 	
 }

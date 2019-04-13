@@ -15,8 +15,8 @@ import entities.Company;
 import entities.Investor;
 import interfaces.Broker;
 import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.Session;
-
 
 /**
  *
@@ -25,12 +25,13 @@ import org.hibernate.Session;
 public class StockMarketSimulator {
 
     private static Dao<Company> CompanyDao;
-    
+
     public static void main(String[] args) {
-        
+
         //
-//        CompanyDao companyDao = new CompanyDao();
-//        InvestorDao investorDao = new InvestorDao();
+        CompanyDao companyDao = new CompanyDao();
+        //Company company = new Company();
+        InvestorDao investorDao = new InvestorDao();
 //        Company c = new Company("Test5", 11, 10);
 //        System.out.println("Beginning transaction");
 //        companyDao.save(c);
@@ -38,18 +39,29 @@ public class StockMarketSimulator {
 //        Investor i = new Investor("Jackie", "Medeiros", 1000);
 //        investorDao.save(i);
 //        System.out.println(i.getFirstName() + " " + i.getLastName() + " saved into Investor's table");
-        
-                
+
         //----------Simulator TESTS----------------------------------------------      
-            Simulator sim = new Simulator();
+        Simulator sim = new Simulator();
 //            sim.loadCompany();
 //            sim.loadInvestors();
-            
+
         //----------Broker TESTS----------------------------------------------
-            
-            sim.loadCompanies(10);
-            sim.loadInvestors(10);
-            sim.tradingDay();
-            
-        }
+        sim.loadCompanies(10);
+        sim.loadInvestors(10);
+        sim.tradingDay();
+
+        //----------findById and getAll COMPANIES TESTS----------------------------------------------
+        System.out.println(companyDao.getById(5));
+        List<Company> companies = companyDao.getAll();
+        System.out.print(companies);
+
+        
+        
+        //----------findById and getAll INVESTORS TESTS----------------------------------------------
+        System.out.println(investorDao.getById(5));
+        List<Investor> investors = investorDao.getAll();
+        System.out.print(investors);
+
+    }
+
 }

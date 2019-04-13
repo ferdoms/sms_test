@@ -87,5 +87,12 @@ public class Investor {
         temp = temp -investment.getValue();
         this.setBudget(temp);
     }
+
+    @Override
+    public String toString() {
+        return "Investor{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", budget=" + budget + '}';
+    }
+    
+    
     
 }

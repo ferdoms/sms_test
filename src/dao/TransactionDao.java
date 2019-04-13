@@ -6,34 +6,90 @@
 package dao;
 
 import entities.TransactionRecord;
+import util.HibernateUtil;
+
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import util.HibernateUtil;
-import org.hibernate.Transaction;
-
-
 
 /**
  *
  * @author Joao Pedro H. Oliveira
  */
-public class TransactionDao implements Dao<TransactionRecord>{
+public class TransactionDao implements Dao<TransactionRecord> {
 
-    @Override
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Transaction transaction = session.beginTransaction();
+
     public void save(TransactionRecord t) {
-        Transaction transaction = null;
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            // start a transaction
+
+        try {
+
+            //start a transaction
             transaction = session.beginTransaction();
-            // save the company object
+            //save object 
             session.save(t);
-            // commit transaction
+            //commit transaction
             transaction.commit();
-        }catch(Exception e){
+            //close session
+            session.close();
+
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
         }
     }
+
+    @Override
+    public TransactionRecord getById(int id) {
+        try {
+            // start a transaction
+            transaction = session.beginTransaction();
+            //get transaction record by primary key id
+            TransactionRecord t = (TransactionRecord) session.get(TransactionRecord.class, id);
+            //commit transaction
+            transaction.commit();
+            //return transaction records
+            return t;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+        return null;
+    }
+
+    @Override
+    public List<TransactionRecord> getAll() {
+        try {
+
+            //start a transaction
+            transaction = session.beginTransaction();
+            //save object
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            //Create CriteriaQuery
+            CriteriaQuery<TransactionRecord> criteria = builder.createQuery(TransactionRecord.class);
+            //Specify criteria root
+            criteria.from(TransactionRecord.class);
+            //Execute query
+            List<TransactionRecord> transactions = session.createQuery(criteria).getResultList();
+            //Close session
+            session.close();
+            //Return all transactions
+            return transactions;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+        return null;
+    }
+
+    
+
 }
