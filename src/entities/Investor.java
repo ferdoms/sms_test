@@ -5,6 +5,7 @@
  */
 package entities;
 
+import dao.InvestorDao;
 import interfaces.Broker;
 import java.util.Random;
 import javax.persistence.Column;
@@ -76,7 +77,7 @@ public class Investor {
         this.budget = budget;
     }
     
-    public void buyInvestent(Broker broker){
+    public void buyInvestment(Broker broker){
         Investment[] investments = broker.investmentsUpTo(this.budget);
         int n = new Random().nextInt(investments.length);
         Investment investment = investments[n];
@@ -86,6 +87,7 @@ public class Investor {
         int temp = this. getBudget();
         temp = temp -investment.getValue();
         this.setBudget(temp);
+        //update user
     }
 
     @Override

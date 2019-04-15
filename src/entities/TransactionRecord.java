@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,21 +23,27 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "transaction")
 public class TransactionRecord {
-
-    public TransactionRecord(Investor buyer, Investment investment) {
-        this.investor = investor;
-        this.investment = investment;
-    }
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToOne
+    
+    @ManyToOne
     @JoinColumn(name = "investor_id", referencedColumnName = "id")
     private Investor investor;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "investment_id", referencedColumnName = "id")
     private Investment investment;
+    @Column(name="amount")
+    private int amount;
+
+    public TransactionRecord(Investor buyer, Investment investment) {
+        this.investor = buyer;
+        this.investment = investment;
+        this.amount = investment.getValue();
+    }
+
+
     
     public Investor getInvestor(){
         return this.investor;

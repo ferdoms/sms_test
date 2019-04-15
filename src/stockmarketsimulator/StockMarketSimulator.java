@@ -10,9 +10,13 @@ import builders.Director;
 import builders.InvestorBuilder;
 import dao.CompanyDao;
 import dao.Dao;
+import dao.InvestmentDao;
 import dao.InvestorDao;
 import entities.Company;
+import entities.Investment;
 import entities.Investor;
+import entities.Share;
+import entities.TransactionRecord;
 import interfaces.Broker;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +57,7 @@ public class StockMarketSimulator {
 //            sim.loadInvestors();
 
         //----------Broker TESTS----------------------------------------------
+
         //sim.loadCompanies(10);
         //sim.loadInvestors(10);
         //sim.tradingDay();
@@ -61,12 +66,20 @@ public class StockMarketSimulator {
         //System.out.println(companyDao.getById(5));
         //List<Company> companies = companyDao.getAll();
         //System.out.print(companies);
-        
-        
+      
+//        CompanyBuilder cb = new CompanyBuilder();
+//        Director d = new Director();
+//        d.constructCompany(cb);
+//        Company c = cb.getObject();
+//        new CompanyDao().save(c);
+//        Investment s = new Share(c);
+//        InvestmentDao investDao = new InvestmentDao();
+//        investDao.save(s);
+//        
+//        new TransactionRecord()
         //----------findById and getAll INVESTORS TESTS----------------------------------------------
         //System.out.println(investorDao.getById(5));
         //List<Investor> investors = investorDao.getAll();
         //System.out.print(investors);
-
-    }
+        }
 }
