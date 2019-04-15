@@ -91,6 +91,8 @@ public class InvestmentDao implements Dao <Investment> {
             session.close();
             //Return all investments
             return investments;
+            
+            
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,6 +102,8 @@ public class InvestmentDao implements Dao <Investment> {
         }
         return null;
     }
+    
+    
 
     
    
