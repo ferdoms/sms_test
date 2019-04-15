@@ -12,6 +12,7 @@ import dao.CompanyDao;
 import dao.InvestorDao;
 import entities.Company;
 import entities.Investor;
+import interfaces.Broker;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -23,6 +24,7 @@ public class Simulator {
     //creating arraylists for company and investors
     public ArrayList<Company> companies = new ArrayList<Company>();
     public ArrayList<Investor> investors = new ArrayList<Investor>();
+    Broker broker = null;
     
     public void loadCompanies(int amount){
         // instantiate company's builder
@@ -52,15 +54,38 @@ public class Simulator {
            investors.add(newInvestor);
         }
     }
+    public void loadBroker(Broker broker){
+        if(broker instanceof ShareBroker){
+            this.broker = broker;
+        }
+        broker.createInvestments(this.companies);
+    }
     
     public void tradingDay(){
-        ShareBroker sb = new ShareBroker();
-        sb.createInvestments(companies);
-        
         Iterator investorsIte = investors.iterator();
+        
+        // stores the top budget investor
+        Investor topBdgInvestor = null;
+        
+        
         while(investorsIte.hasNext()){
-            ((Investor)investorsIte.next()).buyInvestent(sb);
+//            System.out.println("stockmarketsimulator.Simulator.tradingDay()");
+            Investor temp = (Investor)investorsIte.next();
+            
+            // check if investor has enough budget to buy an investment
+            if(broker.investmentsUpTo(temp.getBudget()).length>0){
+                temp.buyInvestment(broker);
+            }
+            // if temp investor has more budget than the topBdgInvestor replace
+            if((topBdgInvestor == null)||(temp.getBudget()>topBdgInvestor.getBudget())){
+                topBdgInvestor = temp;
+            }
 //            sb.update();
+        }
+        
+        // if there are still shares and buyers with budget, keep trading.
+        if((broker.investmentsUpTo(topBdgInvestor.getBudget()).length>0)){
+            this.tradingDay();
         }
     }
 }
