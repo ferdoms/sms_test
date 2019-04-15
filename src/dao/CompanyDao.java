@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 
@@ -23,11 +24,12 @@ import org.hibernate.Transaction;
  */
 public class CompanyDao implements Dao<Company> {
 
-    Session session = HibernateUtil.getSessionFactory().openSession();
+    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Transaction transaction = null;
     
     @Override
     public void save(Company c) {
+        Session session = sessionFactory.openSession();
         try {
 
             //Start a transaction
@@ -36,18 +38,22 @@ public class CompanyDao implements Dao<Company> {
             session.save(c);
             //Commit transaction
             transaction.commit();
-            session.close();
+            //close session
+            //session.close();
 
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public Company getById(int id) {
+        Session session = sessionFactory.openSession();
         try {
             //Start a transaction
             transaction = session.beginTransaction();
@@ -55,6 +61,8 @@ public class CompanyDao implements Dao<Company> {
             Company c = (Company) session.get(Company.class, id);
             //Commit transaction
             transaction.commit();
+            //Close session
+            session.close();
             //Return company
             return c;
         } catch (Exception e) {
@@ -66,6 +74,7 @@ public class CompanyDao implements Dao<Company> {
 
     @Override
     public List<Company> getAll() {
+        Session session = sessionFactory.openSession();
         try {
 
             //Start a transaction
@@ -89,5 +98,37 @@ public class CompanyDao implements Dao<Company> {
         }
         return null;
     }
+    
+    public void update(Company c) {
+        Session session = sessionFactory.openSession();
+        try {
 
+            //Start a transaction
+            transaction = session.beginTransaction();
+            session.update(c);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+    }
+    
+        public void delete(int id) {
+        Session session = sessionFactory.openSession();
+        try {
+
+            //Start a transaction
+            transaction = session.beginTransaction();
+            Company company = (Company) session.load(Company.class, id);
+            session.delete(company);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+    }
+
+   
 }

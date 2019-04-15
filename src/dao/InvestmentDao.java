@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 /**
  *
@@ -21,12 +22,13 @@ import org.hibernate.Transaction;
  */
 public class InvestmentDao implements Dao <Investment> {
     
-    Session session = HibernateUtil.getSessionFactory().openSession();
+    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Transaction transaction = null;
 
     @Override
     public void save(Investment investment) {
-     
+        Session session = sessionFactory.openSession();
+        
         try {
 
             //start a transaction
@@ -42,11 +44,16 @@ public class InvestmentDao implements Dao <Investment> {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
+    
     }
+    
 
     @Override
     public Investment getById(int id) {
+        Session session = sessionFactory.openSession();
         try {
             //Start a transaction
             transaction = session.beginTransaction();
@@ -59,12 +66,15 @@ public class InvestmentDao implements Dao <Investment> {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
 
     @Override
     public List<Investment> getAll() {
+        Session session = sessionFactory.openSession();
         try {
 
             //Start a transaction
@@ -85,6 +95,8 @@ public class InvestmentDao implements Dao <Investment> {
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
