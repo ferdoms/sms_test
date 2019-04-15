@@ -51,10 +51,12 @@ public class ShareBroker implements Broker {
         Iterator comps = companies.iterator();
         while(comps.hasNext()){
             Company company = (Company)comps.next();
-            // investmentDao.save(share
-            investments.add(new Share(company));
+            for(int i=0;i<company.getNumberOfShares();i++){
+                Investment share = new Share(company);
+                investmentDao.save(share);
+                investments.add(share);
+            }
         }
-  
     }
 
     @Override
@@ -85,6 +87,7 @@ public class ShareBroker implements Broker {
             investor.confirmAquisition(investment);
             this.recordTransaction(investor, investment);
             transactionsPeformed++;
+            investments.remove(investment);
         }catch(Exception e){
             System.out.println(e);
         }
@@ -94,9 +97,8 @@ public class ShareBroker implements Broker {
         ArrayList<TransactionRecord> transactions = new ArrayList<TransactionRecord>();
         
         void saveTransaction(Investor buyer, Investment investment){
-//            TransactionRecord record = new TransactionRecord(buyer,investment);
-//            new TransactionDao().save(record);
-            System.out.println(buyer.getFirstName()+" "+investment.getValue() +" "+ ((Share)investment).getCompany().getCompanyName());
+            TransactionRecord record = new TransactionRecord(buyer,investment);
+            new TransactionDao().save(record);
 
         }
         Company[] getOnDemandCompanies(){
@@ -115,7 +117,6 @@ public class ShareBroker implements Broker {
 //            for (Company company:companies){
 //                
 //            }
-
             return shares;
         }
         public Share[] lowDemandShares(){

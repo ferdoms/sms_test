@@ -5,10 +5,13 @@
  */
 package entities;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Inheritance;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.InheritanceType;
 
@@ -24,17 +27,20 @@ import javax.persistence.InheritanceType;
 public abstract class Investment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
     
     int value = 0;
-    int transactionsPeformed = 0;
-    String type = null;
+    
+    @Column(insertable = false, updatable = false)
+    String investment_type;
     
     public int getValue(){
         return this.value;
     }
     public String getType(){
-        return this.type;
+        return this.investment_type;
     }
     public int getId() {
         return id;
@@ -42,7 +48,7 @@ public abstract class Investment {
 
     @Override
     public String toString() {
-        return "Investment{" + "id=" + id + ", value=" + value + ", transactionsPeformed=" + transactionsPeformed + ", type=" + type + '}';
+        return "Investment{" + "id=" + id + ", value=" + value + ", type=" + getType() + '}';
     }
     
     

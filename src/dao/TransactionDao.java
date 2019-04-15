@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
@@ -22,11 +23,11 @@ import org.hibernate.Transaction;
  */
 public class TransactionDao implements Dao<TransactionRecord> {
 
-    Session session = HibernateUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
+    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+    Transaction transaction = null;
 
     public void save(TransactionRecord t) {
-
+        Session session = sessionFactory.openSession();
         try {
 
             //start a transaction
@@ -43,11 +44,15 @@ public class TransactionDao implements Dao<TransactionRecord> {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
+        
     }
 
     @Override
     public TransactionRecord getById(int id) {
+        Session session = sessionFactory.openSession();
         try {
             // start a transaction
             transaction = session.beginTransaction();
@@ -55,7 +60,7 @@ public class TransactionDao implements Dao<TransactionRecord> {
             TransactionRecord t = (TransactionRecord) session.get(TransactionRecord.class, id);
             //commit transaction
             transaction.commit();
-            //return transaction records
+            //return transaction records    
             return t;
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,6 +71,7 @@ public class TransactionDao implements Dao<TransactionRecord> {
 
     @Override
     public List<TransactionRecord> getAll() {
+        Session session = sessionFactory.openSession();
         try {
 
             //start a transaction

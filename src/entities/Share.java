@@ -7,6 +7,9 @@ package entities;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 
 /**
@@ -17,6 +20,8 @@ import javax.persistence.Entity;
 @DiscriminatorValue("share")
 public class Share extends Investment {
     
+    @ManyToOne
+    @JoinColumn(name="company_id", nullable=false)
     Company company;
     
     public Share(Company company){
