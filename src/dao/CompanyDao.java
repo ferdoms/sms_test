@@ -30,6 +30,7 @@ public class CompanyDao implements Dao<Company> {
     @Override
     public void save(Company c) {
         Session session = sessionFactory.openSession();
+        
         try {
 
             //Start a transaction
@@ -38,9 +39,7 @@ public class CompanyDao implements Dao<Company> {
             session.save(c);
             //Commit transaction
             transaction.commit();
-            //close session
-            //session.close();
-
+            
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -54,6 +53,7 @@ public class CompanyDao implements Dao<Company> {
     @Override
     public Company getById(int id) {
         Session session = sessionFactory.openSession();
+        
         try {
             //Start a transaction
             transaction = session.beginTransaction();
@@ -61,13 +61,15 @@ public class CompanyDao implements Dao<Company> {
             Company c = (Company) session.get(Company.class, id);
             //Commit transaction
             transaction.commit();
-            //Close session
-            session.close();
             //Return company
             return c;
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
@@ -75,6 +77,7 @@ public class CompanyDao implements Dao<Company> {
     @Override
     public List<Company> getAll() {
         Session session = sessionFactory.openSession();
+        
         try {
 
             //Start a transaction
@@ -87,8 +90,6 @@ public class CompanyDao implements Dao<Company> {
             criteria.from(Company.class);
             //Execute query
             List<Company> companies = session.createQuery(criteria).getResultList();
-            //Close session
-            session.close();
             //Return all companies
             return companies;
 
@@ -98,9 +99,11 @@ public class CompanyDao implements Dao<Company> {
         }
         return null;
     }
-    
+
+    @Override
     public void update(Company c) {
         Session session = sessionFactory.openSession();
+        
         try {
 
             //Start a transaction
@@ -109,13 +112,19 @@ public class CompanyDao implements Dao<Company> {
             transaction.commit();
                         
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
     }
-    
-        public void delete(int id) {
+
+    @Override
+    public void delete(int id) {
         Session session = sessionFactory.openSession();
+        
         try {
 
             //Start a transaction
@@ -125,10 +134,12 @@ public class CompanyDao implements Dao<Company> {
             transaction.commit();
                         
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
-    }
-
-   
+    } 
 }
