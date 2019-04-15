@@ -20,6 +20,7 @@ import entities.TransactionRecord;
 import interfaces.Broker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import org.hibernate.Session;
 
 /**
@@ -36,9 +37,15 @@ public class StockMarketSimulator {
         CompanyDao companyDao = new CompanyDao();
         //Company company = new Company();
         InvestorDao investorDao = new InvestorDao();
-//        Company c = new Company("Test5", 11, 10);
+        Company c = new Company("Test5", 11, 10);
 //        System.out.println("Beginning transaction");
-//        companyDao.save(c);
+        companyDao.save(c);
+        Company temp = companyDao.getById(1);
+        temp.setCompanyName("Test");
+        companyDao.update(temp);
+        
+        companyDao.delete(1);
+        
 //        System.out.println(c.getCompanyName() + " saved into Company's table");
 //        Investor i = new Investor("Jackie", "Medeiros", 1000);
 //        investorDao.save(i);
@@ -50,23 +57,16 @@ public class StockMarketSimulator {
 //            sim.loadInvestors();
 
         //----------Broker TESTS----------------------------------------------
-        sim.loadCompanies(10);
-        sim.loadInvestors(10);
-        sim.loadBroker(new ShareBroker());
-        sim.tradingDay();
+
+        //sim.loadCompanies(10);
+        //sim.loadInvestors(10);
+        //sim.tradingDay();
 
         //----------findById and getAll COMPANIES TESTS----------------------------------------------
-//        System.out.println(companyDao.getById(5));
-//        List<Company> companies = companyDao.getAll();
-//        System.out.print(companies);
-//
-//        
-//        
-//        //----------findById and getAll INVESTORS TESTS----------------------------------------------
-//        System.out.println(investorDao.getById(5));
-//        List<Investor> investors = investorDao.getAll();
-//        System.out.print(investors);
-        
+        //System.out.println(companyDao.getById(5));
+        //List<Company> companies = companyDao.getAll();
+        //System.out.print(companies);
+      
 //        CompanyBuilder cb = new CompanyBuilder();
 //        Director d = new Director();
 //        d.constructCompany(cb);
@@ -77,7 +77,9 @@ public class StockMarketSimulator {
 //        investDao.save(s);
 //        
 //        new TransactionRecord()
-        
-    }
-
+        //----------findById and getAll INVESTORS TESTS----------------------------------------------
+        //System.out.println(investorDao.getById(5));
+        //List<Investor> investors = investorDao.getAll();
+        //System.out.print(investors);
+        }
 }

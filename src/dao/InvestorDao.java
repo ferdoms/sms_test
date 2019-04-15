@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
@@ -22,12 +23,14 @@ import org.hibernate.Transaction;
  */
 public class InvestorDao implements Dao <Investor>{
     
-    Session session = HibernateUtil.getSessionFactory().openSession();
+    SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Transaction transaction = null;
     
    
     @Override
     public void save (Investor i) {
+        Session session = sessionFactory.openSession();
+        
         try {
 
             //Start a transaction
@@ -36,19 +39,20 @@ public class InvestorDao implements Dao <Investor>{
             session.save(i);
             //Commit transaction
             transaction.commit();
-            //Close session
-            session.close();
-        
+                    
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public Investor getById(int id) {
+        Session session = sessionFactory.openSession();
         
         try {
             //Start a transaction
@@ -60,14 +64,19 @@ public class InvestorDao implements Dao <Investor>{
             //Return company
             return i;
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
-    }
+    }   
 
     @Override
     public List<Investor> getAll() {
+        Session session = sessionFactory.openSession();
         
         try {
 
@@ -81,18 +90,60 @@ public class InvestorDao implements Dao <Investor>{
             criteria.from(Investor.class);
             //Execute query
             List<Investor> investors = session.createQuery(criteria).getResultList();
-            //Close session
-            session.close();
             //Return all investors
             return investors;
 
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
 
-   
+    @Override
+    public void update(Investor i) {        
+        Session session = sessionFactory.openSession();
+        
+        try {
 
+            //Start a transaction
+            transaction = session.beginTransaction();
+            session.update(i);
+            transaction.commit();
+                        
+       } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        Session session = sessionFactory.openSession();
+        
+        try {
+
+            //Start a transaction
+            transaction = session.beginTransaction();
+            Investor investor = (Investor) session.load(Investor.class, id);
+            session.delete(investor);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    } 
 }

@@ -28,6 +28,7 @@ public class TransactionDao implements Dao<TransactionRecord> {
 
     public void save(TransactionRecord t) {
         Session session = sessionFactory.openSession();
+        
         try {
 
             //start a transaction
@@ -36,9 +37,7 @@ public class TransactionDao implements Dao<TransactionRecord> {
             session.save(t);
             //commit transaction
             transaction.commit();
-            //close session
-            session.close();
-
+            
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -46,13 +45,13 @@ public class TransactionDao implements Dao<TransactionRecord> {
             e.printStackTrace();
         } finally {
             session.close();
-        }
-        
+        }        
     }
 
     @Override
     public TransactionRecord getById(int id) {
         Session session = sessionFactory.openSession();
+        
         try {
             // start a transaction
             transaction = session.beginTransaction();
@@ -63,8 +62,12 @@ public class TransactionDao implements Dao<TransactionRecord> {
             //return transaction records    
             return t;
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
@@ -84,18 +87,61 @@ public class TransactionDao implements Dao<TransactionRecord> {
             criteria.from(TransactionRecord.class);
             //Execute query
             List<TransactionRecord> transactions = session.createQuery(criteria).getResultList();
-            //Close session
-            session.close();
             //Return all transactions
             return transactions;
 
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
-            session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
 
-    
+    @Override
+    public void update(TransactionRecord t) {
+        Session session = sessionFactory.openSession();
+        
+        try {
 
+            //Start a transaction
+            transaction = session.beginTransaction();
+            session.update(t);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+
+    @Override
+    public void delete(int id) {
+        Session session = sessionFactory.openSession();
+        
+        try {
+
+            //Start a transaction
+            transaction = session.beginTransaction();
+            TransactionRecord t = (TransactionRecord) session.load(TransactionRecord.class, id);
+            session.delete(t);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }   
 }

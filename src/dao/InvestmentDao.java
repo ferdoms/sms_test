@@ -37,8 +37,7 @@ public class InvestmentDao implements Dao <Investment> {
             session.save(investment);
             //commit transaction
             transaction.commit();
-            session.close();
-
+            
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -54,6 +53,7 @@ public class InvestmentDao implements Dao <Investment> {
     @Override
     public Investment getById(int id) {
         Session session = sessionFactory.openSession();
+        
         try {
             //Start a transaction
             transaction = session.beginTransaction();
@@ -75,6 +75,7 @@ public class InvestmentDao implements Dao <Investment> {
     @Override
     public List<Investment> getAll() {
         Session session = sessionFactory.openSession();
+        
         try {
 
             //Start a transaction
@@ -87,8 +88,6 @@ public class InvestmentDao implements Dao <Investment> {
             criteria.from(Investment.class);
             //Execute query
             List<Investment> investments = session.createQuery(criteria).getResultList();
-            //Close session
-            session.close();
             //Return all investments
             return investments;
             
@@ -105,6 +104,44 @@ public class InvestmentDao implements Dao <Investment> {
     
     
 
-    
-   
+    @Override
+    public void update(Investment investment) {
+        Session session = sessionFactory.openSession();
+        
+        try {
+
+            //Start a transaction
+            transaction = session.beginTransaction();
+            session.update(investment);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+       Session session = sessionFactory.openSession();
+       
+        try {
+
+            //Start a transaction
+            transaction = session.beginTransaction();
+            Investment investment = (Investment) session.load(Investment.class, id);
+            session.delete(investment);
+            transaction.commit();
+                        
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }  
 }
