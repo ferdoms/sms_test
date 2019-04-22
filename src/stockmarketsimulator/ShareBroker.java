@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import entities.Share;
 import entities.TransactionRecord;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -28,8 +29,8 @@ public class ShareBroker implements Broker {
     InvestmentDao investmentDao = new InvestmentDao();
     
     public void update(){
-        this.valueShares(report.highDemandShares());
-        this.devalueShares(report.lowDemandShares());
+        Object[] cId = ((Object[])report.getLastTransactionsComp());
+        p
         
     }
     @Override
@@ -51,11 +52,9 @@ public class ShareBroker implements Broker {
         Iterator comps = companies.iterator();
         while(comps.hasNext()){
             Company company = (Company)comps.next();
-            for(int i=0;i<company.getNumberOfShares();i++){
-                Investment share = new Share(company);
-                investmentDao.save(share);
-                investments.add(share);
-            }
+            Investment share = new Share(company);
+            investmentDao.save(share);
+            investments.add(share);
         }
     }
 
@@ -63,31 +62,13 @@ public class ShareBroker implements Broker {
     public void recordTransaction(Investor investor, Investment investment) {
         report.saveTransaction(investor, investment);
     }
-    
-    private void valueShares(Share[] shares){
-        for(Share share:shares){
-            int actualValue = share.getValue();
-            share.setValue(actualValue*2);
-            investmentDao.save(share);
-            investments.removeIf(i -> (i.getId() == share.getId()));
-            investments.add(share);
-        }
-    }
-    private void devalueShares(Share[] shares){
-        for(Share share:shares){
-            int actualValue = share.getValue();
-            share.setValue((int)Math.round(actualValue*0.05));
-            investmentDao.save(share);
-            investments.removeIf(i -> (i.getId() == share.getId()));
-            investments.add(share);
-        }
-    }
     public void performTransaction(Investor investor, Investment investment ){
         try{
             investor.confirmAquisition(investment);
             this.recordTransaction(investor, investment);
+            ((Share)investment).accountSoldShare();
+            investmentDao.save(investment);
             transactionsPeformed++;
-            investments.remove(investment);
         }catch(Exception e){
             System.out.println(e);
         }
@@ -101,27 +82,11 @@ public class ShareBroker implements Broker {
             new TransactionDao().save(record);
 
         }
-        Company[] getOnDemandCompanies(){
-            Company[] temp = null;
-            return temp;
-        }
+        Object[] getLastTransactionsComp(){
+            List<Object[]> list = new TransactionDao().getLastTransactionsComp();
             
-        public Share[] highDemandShares(){
-            Share[] shares = null;
-//            ArrayList<Investment> temp = investments;
-//            // filter shares from investments
-//            temp.removeIf(i -> (i.getType() == "share"));
-//            // get array of companies ids, which has sold 10 shares
-//            Company[] companies = report.getOnDemandCompanies();
-//            temp.removeIf(i -> (i.getCompany() == "share"));
-//            for (Company company:companies){
-//                
-//            }
-            return shares;
+            return list.toArray();
         }
-        public Share[] lowDemandShares(){
-            Share[] shares = null;
-            return shares;
-        }
+
     } 
 }

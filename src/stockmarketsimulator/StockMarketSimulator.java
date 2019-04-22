@@ -12,6 +12,7 @@ import dao.CompanyDao;
 import dao.Dao;
 import dao.InvestmentDao;
 import dao.InvestorDao;
+import dao.TransactionDao;
 import entities.Company;
 import entities.Investment;
 import entities.Investor;
@@ -21,6 +22,7 @@ import interfaces.Broker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import javax.persistence.Tuple;
 import org.hibernate.Session;
 
 /**
@@ -57,11 +59,18 @@ public class StockMarketSimulator {
 //            sim.loadInvestors();
 
         //----------Broker TESTS----------------------------------------------
-
-        //sim.loadCompanies(10);
-        //sim.loadInvestors(10);
-        //sim.tradingDay();
-
+        System.out.println("loading companies");
+        sim.loadCompanies(10);
+        System.out.println("loading investors");
+        sim.loadInvestors(10);
+        System.out.println("loading broker");
+        sim.loadBroker(new ShareBroker());
+        System.out.println("Transactions started");
+        sim.tradingDay();
+//        List<Object[]> list = new TransactionDao().getOnDemandCompanies();
+//        if(list.size()>0){
+//                System.out.println(list.toString());
+//        }
         //----------findById and getAll COMPANIES TESTS----------------------------------------------
         //System.out.println(companyDao.getById(5));
         //List<Company> companies = companyDao.getAll();
