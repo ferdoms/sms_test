@@ -31,6 +31,8 @@ public class Share extends Investment {
     @JoinColumn(name="company_id", nullable=false)
     Company company;
     
+    public Share(){}
+    
     public Share(Company company){
         this.value = company.getSharePrice();
         this.company = company;

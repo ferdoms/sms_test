@@ -60,9 +60,9 @@ public class StockMarketSimulator {
 
         //----------Broker TESTS----------------------------------------------
         System.out.println("loading companies");
-        sim.loadCompanies(10);
+        sim.loadCompanies(100);
         System.out.println("loading investors");
-        sim.loadInvestors(10);
+        sim.loadInvestors(100);
         System.out.println("loading broker");
         sim.loadBroker(new ShareBroker());
         System.out.println("Transactions started");

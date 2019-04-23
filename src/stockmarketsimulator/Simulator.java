@@ -69,7 +69,7 @@ public class Simulator {
         
         
         while(investorsIte.hasNext()){
-//            System.out.println("stockmarketsimulator.Simulator.tradingDay()");
+//           System.out.println("stockmarketsimulator.Simulator.tradingDay()");
             Investor temp = (Investor)investorsIte.next();
             
             // check if investor has enough budget to buy an investment
@@ -80,9 +80,7 @@ public class Simulator {
             if((topBdgInvestor == null)||(temp.getBudget()>topBdgInvestor.getBudget())){
                 topBdgInvestor = temp;
             }
-//            sb.update();
         }
-        
         // if there are still shares and buyers with budget, keep trading.
         if((broker.investmentsUpTo(topBdgInvestor.getBudget()).length>0)){
             this.tradingDay();

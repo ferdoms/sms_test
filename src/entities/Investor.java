@@ -5,6 +5,7 @@
  */
 package entities;
 
+import dao.InvestmentDao;
 import dao.InvestorDao;
 import interfaces.Broker;
 import java.util.Random;
@@ -87,7 +88,7 @@ public class Investor {
         int temp = this. getBudget();
         temp = temp -investment.getValue();
         this.setBudget(temp);
-        //update user
+        new InvestorDao().update(this);
     }
 
     @Override

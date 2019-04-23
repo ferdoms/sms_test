@@ -23,20 +23,31 @@ import java.util.List;
  */
 public class ShareBroker implements Broker {
     
-    private ArrayList<Investment> investments = new ArrayList<Investment>();
     private int transactionsPeformed;
     private Report report = new Report();
     InvestmentDao investmentDao = new InvestmentDao();
     
     public void update(){
-        Object[] cId = ((Object[])report.getLastTransactionsComp());
-        p
+        // decrease price of low demand companies
+        //get low demand investments
+        Object[] list = ((Object[])report.getLowDemandInvestment());
+        
+            System.out.println(transactionsPeformed);
+        // for each investment on the list reduce 2% of its price
+        if(list != null){
+            for(Object item:list){
+               Investment i = investmentDao.getById((int)item);
+//                System.out.println((int)Math.round(((Share)i).getValue()*0.98));
+               ((Share)i).setValue((int)Math.round(((Share)i).getValue()*0.98)); 
+               investmentDao.update(i);
+            }
+        }
         
     }
     @Override
     public Investment[] investmentsUpTo(int amount){
         // get list of investments
-        ArrayList<Investment> temp = investments;
+        List<Investment> temp = investmentDao.getAll();
         // filter investments valued up to @param amount
         temp.removeIf(i-> (i.getValue() > amount));
         
@@ -54,7 +65,6 @@ public class ShareBroker implements Broker {
             Company company = (Company)comps.next();
             Investment share = new Share(company);
             investmentDao.save(share);
-            investments.add(share);
         }
     }
 
@@ -67,8 +77,12 @@ public class ShareBroker implements Broker {
             investor.confirmAquisition(investment);
             this.recordTransaction(investor, investment);
             ((Share)investment).accountSoldShare();
-            investmentDao.save(investment);
+            investmentDao.update(investment);
             transactionsPeformed++;
+            //update shares prices
+            if((transactionsPeformed%10)==0){
+                this.update();
+            }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -82,10 +96,15 @@ public class ShareBroker implements Broker {
             new TransactionDao().save(record);
 
         }
-        Object[] getLastTransactionsComp(){
-            List<Object[]> list = new TransactionDao().getLastTransactionsComp();
-            
-            return list.toArray();
+        Object[] getLowDemandInvestment(){
+            List<Object[]> list = new TransactionDao().getLowDemandInvestment();
+            Iterator iList = list.iterator();
+            List<Integer> cIdList = new ArrayList<Integer>();
+            while(iList.hasNext()){
+                Object[] o = (Object[])iList.next();
+                cIdList.add((Integer)o[0]);
+            }
+            return cIdList.toArray();
         }
 
     } 
