@@ -90,6 +90,8 @@ public class InvestmentDao implements Dao <Investment> {
             List<Investment> investments = session.createQuery(criteria).getResultList();
             //Return all investments
             return investments;
+            
+            
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +101,8 @@ public class InvestmentDao implements Dao <Investment> {
         }
         return null;
     }
+    
+    
 
     @Override
     public void update(Investment investment) {

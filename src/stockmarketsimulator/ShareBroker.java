@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import entities.Share;
 import entities.TransactionRecord;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -22,20 +23,31 @@ import java.util.Iterator;
  */
 public class ShareBroker implements Broker {
     
-    private ArrayList<Investment> investments = new ArrayList<Investment>();
     private int transactionsPeformed;
     private Report report = new Report();
     InvestmentDao investmentDao = new InvestmentDao();
     
     public void update(){
-        this.valueShares(report.highDemandShares());
-        this.devalueShares(report.lowDemandShares());
+        // decrease price of low demand companies
+        //get low demand investments
+        Object[] list = ((Object[])report.getLowDemandInvestment());
+        
+            System.out.println(transactionsPeformed);
+        // for each investment on the list reduce 2% of its price
+        if(list != null){
+            for(Object item:list){
+               Investment i = investmentDao.getById((int)item);
+//                System.out.println((int)Math.round(((Share)i).getValue()*0.98));
+               ((Share)i).setValue((int)Math.round(((Share)i).getValue()*0.98)); 
+               investmentDao.update(i);
+            }
+        }
         
     }
     @Override
     public Investment[] investmentsUpTo(int amount){
         // get list of investments
-        ArrayList<Investment> temp = investments;
+        List<Investment> temp = investmentDao.getAll();
         // filter investments valued up to @param amount
         temp.removeIf(i-> (i.getValue() > amount));
         
@@ -51,11 +63,8 @@ public class ShareBroker implements Broker {
         Iterator comps = companies.iterator();
         while(comps.hasNext()){
             Company company = (Company)comps.next();
-            for(int i=0;i<company.getNumberOfShares();i++){
-                Investment share = new Share(company);
-                investmentDao.save(share);
-                investments.add(share);
-            }
+            Investment share = new Share(company);
+            investmentDao.save(share);
         }
     }
 
@@ -63,31 +72,17 @@ public class ShareBroker implements Broker {
     public void recordTransaction(Investor investor, Investment investment) {
         report.saveTransaction(investor, investment);
     }
-    
-    private void valueShares(Share[] shares){
-        for(Share share:shares){
-            int actualValue = share.getValue();
-            share.setValue(actualValue*2);
-            investmentDao.save(share);
-            investments.removeIf(i -> (i.getId() == share.getId()));
-            investments.add(share);
-        }
-    }
-    private void devalueShares(Share[] shares){
-        for(Share share:shares){
-            int actualValue = share.getValue();
-            share.setValue((int)Math.round(actualValue*0.05));
-            investmentDao.save(share);
-            investments.removeIf(i -> (i.getId() == share.getId()));
-            investments.add(share);
-        }
-    }
     public void performTransaction(Investor investor, Investment investment ){
         try{
             investor.confirmAquisition(investment);
             this.recordTransaction(investor, investment);
+            ((Share)investment).accountSoldShare();
+            investmentDao.update(investment);
             transactionsPeformed++;
-            investments.remove(investment);
+            //update shares prices
+            if((transactionsPeformed%10)==0){
+                this.update();
+            }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -101,27 +96,16 @@ public class ShareBroker implements Broker {
             new TransactionDao().save(record);
 
         }
-        Company[] getOnDemandCompanies(){
-            Company[] temp = null;
-            return temp;
+        Object[] getLowDemandInvestment(){
+            List<Object[]> list = new TransactionDao().getLowDemandInvestment();
+            Iterator iList = list.iterator();
+            List<Integer> cIdList = new ArrayList<Integer>();
+            while(iList.hasNext()){
+                Object[] o = (Object[])iList.next();
+                cIdList.add((Integer)o[0]);
+            }
+            return cIdList.toArray();
         }
-            
-        public Share[] highDemandShares(){
-            Share[] shares = null;
-//            ArrayList<Investment> temp = investments;
-//            // filter shares from investments
-//            temp.removeIf(i -> (i.getType() == "share"));
-//            // get array of companies ids, which has sold 10 shares
-//            Company[] companies = report.getOnDemandCompanies();
-//            temp.removeIf(i -> (i.getCompany() == "share"));
-//            for (Company company:companies){
-//                
-//            }
-            return shares;
-        }
-        public Share[] lowDemandShares(){
-            Share[] shares = null;
-            return shares;
-        }
+
     } 
 }

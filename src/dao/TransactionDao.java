@@ -12,10 +12,17 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import entities.Investment;
+import entities.Company;
+import entities.Share;
+import javax.persistence.Tuple;
+import javax.persistence.criteria.Join;
+import org.hibernate.SQLQuery;
 
 /**
  *
@@ -143,5 +150,33 @@ public class TransactionDao implements Dao<TransactionRecord> {
         } finally {
             session.close();
         }
-    }   
+    }
+    // return a list of companies that has sold 10 shares
+    public List<Object[]> getLowDemandInvestment() {
+        Session session = sessionFactory.openSession();
+        try {
+
+            //start a transaction
+            transaction = session.beginTransaction();
+            
+            SQLQuery query = session.createSQLQuery("select i.id, count(t.id) as totals\n" +
+                "from transaction as t\n" +
+                "right join investment as i on t.investment_id = i.id\n" +
+                "group by i.id\n" +
+                "having count(t.id) = 0");
+            List<Object[]> rows = query.list();
+            return rows;
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
+    
+    
 }
