@@ -5,11 +5,13 @@
  */
 package entities;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -20,8 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="company")
 public class Company {
-    
-    
+  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -32,14 +33,17 @@ public class Company {
     @Column(name="number_shares")
     private int numberOfShares;
     @Column(name="share_price")
-    private float sharePrice;
+    private int sharePrice;
+    @OneToMany(mappedBy="company")
+    private List<Share> Share;
+    
     
      
     public Company(){
         
     }
 
-    public Company(String companyName, int numberOfShares, float sharePrice) {
+    public Company(String companyName, int numberOfShares, int sharePrice) {
         this.companyName = companyName;
         this.numberOfShares = numberOfShares;
         this.sharePrice = sharePrice;
@@ -69,12 +73,19 @@ public class Company {
         this.numberOfShares = numberOfShares;
     }
 
-    public float getSharePrice() {
+    public int getSharePrice() {
         return sharePrice;
     }
 
-    public void setSharePrice(float sharePrice) {
+    public void setSharePrice(int sharePrice) {
         this.sharePrice = sharePrice;
     }
+
+    @Override
+    public String toString() {
+        return "Company{" + "id=" + id + ", companyName=" + companyName + ", numberOfShares=" + numberOfShares + ", sharePrice=" + sharePrice + '}';
+    }
+    
+    
 
 }

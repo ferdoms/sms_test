@@ -6,8 +6,13 @@
 package util;
 
 import entities.Company;
+import entities.EquityFund;
+import entities.Investment;
 import entities.Investor;
+import entities.Share;
+import entities.TransactionRecord;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 /**
@@ -24,6 +29,9 @@ public class HibernateUtil {
             return new Configuration().configure("hibernate.cfg.xml")
                                       .addAnnotatedClass(Company.class)
                                       .addAnnotatedClass(Investor.class)
+                                      .addAnnotatedClass(Investment.class)
+                                      .addAnnotatedClass(TransactionRecord.class)
+                                      .addAnnotatedClass(Share.class)
                                       .buildSessionFactory();
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed

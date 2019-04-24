@@ -5,23 +5,25 @@
  */
 package interfaces;
 
+import entities.Investment;
+import entities.Investor;
+import entities.Company;
+import java.util.ArrayList;
 
 /**
  *
  * @author fernandoms
  */
 public interface Broker {
-    
-    // this method should updade investments value
-    public void update();
+
     // should return any investment with values up to the inserted parameter
-    public Investment[] investmentsUpTo(float value);
+    public Investment[] investmentsUpTo(int value);
     // create investments ideally store in arrayList;
-    public void createInvestments();
+    public void createInvestments(ArrayList<Company> companies);
     
-    public void evaluateInvestments();
+    public void performTransaction(Investor investor, Investment investment);
     
-    public void recordTransaction();
+    public void recordTransaction(Investor investor, Investment investment);
     
     public class Report{};
     

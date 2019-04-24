@@ -5,7 +5,7 @@
  */
 package dao;
 
-import entities.Company;
+import entities.Investment;
 import util.HibernateUtil;
 
 import java.util.List;
@@ -16,28 +16,26 @@ import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
-
 /**
  *
- * @author jacqu
+ * @author fernandoms
  */
-public class CompanyDao implements Dao<Company> {
-
+public class InvestmentDao implements Dao <Investment> {
+    
     SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
     Transaction transaction = null;
-    
+
     @Override
-    public void save(Company c) {
+    public void save(Investment investment) {
         Session session = sessionFactory.openSession();
         
         try {
 
-            //Start a transaction
+            //start a transaction
             transaction = session.beginTransaction();
-            //Save object
-            session.save(c);
-            //Commit transaction
+            //save object
+            session.save(investment);
+            //commit transaction
             transaction.commit();
             
         } catch (Exception e) {
@@ -48,26 +46,26 @@ public class CompanyDao implements Dao<Company> {
         } finally {
             session.close();
         }
+    
     }
+    
 
     @Override
-    public Company getById(int id) {
+    public Investment getById(int id) {
         Session session = sessionFactory.openSession();
         
         try {
             //Start a transaction
             transaction = session.beginTransaction();
-            //Get company by primary key id
-            Company c = (Company) session.get(Company.class, id);
+            //Get investment by primary key id
+            Investment investment = (Investment) session.get(Investment.class, id);
             //Commit transaction
             transaction.commit();
-            //Return company
-            return c;
+            //Return investment 
+            return investment;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
+            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -75,7 +73,7 @@ public class CompanyDao implements Dao<Company> {
     }
 
     @Override
-    public List<Company> getAll() {
+    public List<Investment> getAll() {
         Session session = sessionFactory.openSession();
         
         try {
@@ -85,37 +83,41 @@ public class CompanyDao implements Dao<Company> {
             //Save object
             CriteriaBuilder builder = session.getCriteriaBuilder();
             //Create CriteriaQuery
-            CriteriaQuery<Company> criteria = builder.createQuery(Company.class);
+            CriteriaQuery<Investment> criteria = builder.createQuery(Investment.class);
             //Specify criteria root
-            criteria.from(Company.class);
+            criteria.from(Investment.class);
             //Execute query
-            List<Company> companies = session.createQuery(criteria).getResultList();
-            //Return all companies
-            return companies;
+            List<Investment> investments = session.createQuery(criteria).getResultList();
+            //Return all investments
+            return investments;
+            
+            
 
         } catch (Exception e) {
             e.printStackTrace();
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return null;
     }
+    
+    
 
     @Override
-    public void update(Company c) {
+    public void update(Investment investment) {
         Session session = sessionFactory.openSession();
         
         try {
 
             //Start a transaction
             transaction = session.beginTransaction();
-            session.update(c);
+            session.update(investment);
             transaction.commit();
                         
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
+            session.getTransaction().rollback();
         } finally {
             session.close();
         }
@@ -123,14 +125,14 @@ public class CompanyDao implements Dao<Company> {
 
     @Override
     public void delete(int id) {
-        Session session = sessionFactory.openSession();
-        
+       Session session = sessionFactory.openSession();
+       
         try {
 
             //Start a transaction
             transaction = session.beginTransaction();
-            Company company = (Company) session.load(Company.class, id);
-            session.delete(company);
+            Investment investment = (Investment) session.load(Investment.class, id);
+            session.delete(investment);
             transaction.commit();
                         
         } catch (Exception e) {
@@ -141,5 +143,5 @@ public class CompanyDao implements Dao<Company> {
         } finally {
             session.close();
         }
-    } 
+    }  
 }

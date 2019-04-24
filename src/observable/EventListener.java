@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaces;
+package observable;
 
+import entities.Investment;
+import entities.Share;
 /**
  *
  * @author fernandoms
  */
-public class Investment {
-    
-    private float value;
-    
+public interface EventListener<E> {
+    abstract void update(String eventType, E item);
 }
