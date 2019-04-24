@@ -15,9 +15,7 @@ import java.util.ArrayList;
  * @author fernandoms
  */
 public interface Broker {
-    
-    // this method should updade investments value
-    public void update();
+
     // should return any investment with values up to the inserted parameter
     public Investment[] investmentsUpTo(int value);
     // create investments ideally store in arrayList;

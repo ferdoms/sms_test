@@ -26,6 +26,7 @@ public class Simulator {
     public ArrayList<Investor> investors = new ArrayList<Investor>();
     Broker broker = null;
     
+    
     public void loadCompanies(int amount){
         // instantiate company's builder
         CompanyBuilder comBuilder = new CompanyBuilder();
@@ -58,7 +59,8 @@ public class Simulator {
         if(broker instanceof ShareBroker){
             this.broker = broker;
         }
-        broker.createInvestments(this.companies);
+        this.broker.createInvestments(companies);
+        
     }
     
     public void tradingDay(){
@@ -86,4 +88,5 @@ public class Simulator {
             this.tradingDay();
         }
     }
+
 }
