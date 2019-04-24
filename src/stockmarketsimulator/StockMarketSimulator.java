@@ -64,6 +64,8 @@ public class StockMarketSimulator {
         System.out.println("loading investors");
         sim.loadInvestors(100);
         System.out.println("loading broker");
+        
+//        BrokerDecorator broker = new EquityFundBroker();
         sim.loadBroker(new ShareBroker());
         System.out.println("Transactions started");
         sim.tradingDay();

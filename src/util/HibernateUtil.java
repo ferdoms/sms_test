@@ -6,6 +6,7 @@
 package util;
 
 import entities.Company;
+import entities.EquityFund;
 import entities.Investment;
 import entities.Investor;
 import entities.Share;

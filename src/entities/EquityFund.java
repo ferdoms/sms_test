@@ -18,8 +18,8 @@ import javax.persistence.OneToOne;
  * @author fernandoms
  */
 @Entity
-@DiscriminatorValue("share")
-public class Share extends Investment {
+@DiscriminatorValue("equity_fund")
+public class EquityFund extends Investment {
     
 //    @Column(name="shares_sold")
     private int soldShareCounter = 0;
@@ -31,12 +31,13 @@ public class Share extends Investment {
     @JoinColumn(name="company_id", nullable=false)
     Company company;
     
-    public Share(){}
+    public EquityFund(){}
     
-    public Share(Company company){
-        this.value = company.getSharePrice();
-        this.company = company;
-        this.amount = company.getNumberOfShares();
+    public EquityFund(Share shares){
+//        for(Share s:shares){
+            this.value = shares.getValue();
+//        }
+//        this.value = company.getSharePrice();
     }       
     public void setValue(int value){
         this.value = value;
@@ -50,8 +51,6 @@ public class Share extends Investment {
     public int getValue(){
         return value;
     }
-    public void accountSoldShare(){
-        this.amount--;
-    }
+    
     
 }
